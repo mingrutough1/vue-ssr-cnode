@@ -20,3 +20,4 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+使用nuxt.js实现的cnode社区
