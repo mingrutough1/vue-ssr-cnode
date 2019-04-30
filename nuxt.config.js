@@ -1,6 +1,7 @@
 const pkg = require('./package')
 
-
+const webpack = require('webpack');
+const path = require('path');
 module.exports = {
   mode: 'universal',
 
@@ -27,13 +28,13 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [
-  ],
+  css: ['~assets/css/index.scss'],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '~/plugins/index'
   ],
 
   /*
@@ -58,6 +59,11 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
+    plugins: [
+      new webpack.ProvidePlugin({
+        $apiData: [path.resolve(__dirname, "./config/api.js"), "default"]
+      })
+    ],
     extend(config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {

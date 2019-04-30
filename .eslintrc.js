@@ -21,5 +21,8 @@ module.exports = {
   rules: {
     'nuxt/no-cjs-in-config': 'off',
     'prettier/prettier': 1,
+    'no-console': 0,
+    'spaced-comment': 1,
+    'no-undef': 0
   }
 }

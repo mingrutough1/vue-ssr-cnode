@@ -1,0 +1,20 @@
+
+* {
+  box-sizing: border-box;    
+}
+body{
+  font-size: 14px;
+  color: #313131;
+}
+
+.base-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+h2 {
+  max-width: calc(100vw - 100px);
+}
+.markdown-body{
+  padding: 0 20px;
+}

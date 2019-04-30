@@ -1,68 +1,89 @@
 <template>
-  <section class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        vue-ssr-cnode
-      </h1>
-      <h2 class="subtitle">
-        My wonderful Nuxt.js project
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >GitHub</a>
-      </div>
-    </div>
-  </section>
+  <div :class="$style.container">
+    <BaseList
+      :listData="listData"
+      @loadMore="getTopics"
+      :loading="listLoading"
+    ></BaseList>
+  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import BaseList from "@/components/BaseList";
 
 export default {
+  name: "app-list",
   components: {
-    Logo
+    BaseList
+  },
+  data() {
+    return {
+      page: 1,
+      listLoading: false,
+      listData: []
+    };
+  },
+  watchQuery: ['tab'],
+  async asyncData( { $axios, query } ) {
+    const { type, url } = $apiData.GET_TOPICS;  
+    const tab = query.tab;
+    const { data } = await $axios[type](url, {
+        params: {
+          tab,
+          page: 1,
+          limit: 10,
+          mdrender: true
+        }
+      });
+      return {
+        listData: data.data
+      };
+  },
+  computed: {
+    activeTab() {
+      return this.$route.query.tab;
+    }
+  },
+  // watch: {
+  //   $route () {
+  //     this.resetData();
+  //     this.getTopics();
+  //   },
+  // },
+  mounted() {},
+  methods: {
+    resetData() {
+      this.page = 0;
+      this.listData = [];
+    },
+    getTopics() {
+      this.page += 1;
+      // this.listLoading = true;
+      this.topicsAjax().then(res => {
+        if (res.data.success) {
+          this.listData = this.listData.concat(res.data.data || []);
+        }
+        // this.listLoading = false;
+      });
+    },
+    topicsAjax() {
+      const { type, url } = $apiData.GET_TOPICS;
+      return this.$axios[type](url, {
+        params: {
+          tab: this.activeTab,
+          page: this.page,
+          limit: 10,
+          mdrender: true
+        }
+      });
+    },
   }
-}
+};
 </script>
 
-<style>
+<style lang="scss" module>
 .container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+  border-radius: 2px;
+  padding: 6px;
 }
 </style>
