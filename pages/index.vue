@@ -44,13 +44,9 @@ export default {
       return this.$route.query.tab;
     }
   },
-  // watch: {
-  //   $route () {
-  //     this.resetData();
-  //     this.getTopics();
-  //   },
-  // },
-  mounted() {},
+  mounted() {
+    console.log(this);
+  },
   methods: {
     resetData() {
       this.page = 0;

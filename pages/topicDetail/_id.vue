@@ -40,6 +40,7 @@ export default {
   async asyncData( { $axios, params } ) {
     const { type, url } = $apiData.GET_TOPIC_DETAIL;
     const id = params.id;
+    console.log('asyncData', this);
     const { data } = await $axios[type](`${url}${id}`);
     return {
       topicData: data.data
